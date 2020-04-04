@@ -30,7 +30,7 @@ from email import encoders
 face_db=mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Aimfame1@",
+        password="xxxxx",
         database="face_db")
 
 
@@ -101,7 +101,7 @@ s.starttls()
 #re-identify ourselves as an encrypted connection
 s.ehlo()
 # Authentication 
-s.login(from_add, "Aimfame1") 
+s.login(from_add, "xxxxx") 
 # Converts the Multipart msg into a string 
 text=msg.as_string() 
 # sending the mail 
