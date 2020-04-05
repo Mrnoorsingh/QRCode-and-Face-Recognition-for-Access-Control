@@ -1,20 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[48]:
-
-
 import cv2
 import uuid 
 import pyqrcode
 import face_entry
 import numpy as np
 import mysql.connector
-
-
-# In[32]:
-
-
 import smtplib 
 from email.mime.multipart import MIMEMultipart 
 from email.mime.text import MIMEText 
@@ -22,51 +14,29 @@ from email.mime.base import MIMEBase
 from email import encoders 
 
 
-# In[ ]:
-
-
 #create database connection using myconnector
 #connect database created in creat_db
-face_db=mysql.connector.connect(
+db=mysql.connector.connect(
         host="localhost",
         user="root",
         password="xxxxx",
         database="face_db")
 
-
-# In[45]:
-
-
 #string representing the unique qr code
 string=str(uuid.uuid1())
-
-
-# In[39]:
-
 
 #generate qrcode
 qr=pyqrcode.create(string)
 
-
-# In[59]:
-
-
 #save qrcode as png file
 #choose filename as username and dob 
-file_name=input("Type in the QR-Code file name")
+file_name=input("Set qrcode file name: ")
 qr.png(file_name,scale=7)
-
-
-# In[69]:
 
 
 #sender and receiver email address
 from_add="imnoorsingh@gmail.com"
 to_add=input("Type in the user's email address: ")
-
-
-# In[70]:
-
 
 #instance of MIMEMultipart 
 msg=MIMEMultipart() 
@@ -109,31 +79,20 @@ s.sendmail(from_add, to_add, text)
 # terminating the session 
 s.quit() 
 
-
-# In[ ]:
-
-
 #extract and store new face embedding
 embedding=face_entry.face_embedding()
-
-
-# In[ ]:
-
+print("REGISTRATION SUCCESSFULLY COMPLETED!")
 
 #store uniqueid and face embedding in the database
 #create cursor object
-mycursor=face_db.cursor()
+mycursor=db.cursor()
 #insert row into the table
 query="INSERT INTO Registered_users (UniqueID,Embedding_Vector) VALUES (%s,%s)"
 mycursor.execute(query,(string,embedding))
 #commit changes
-face_db.commit()
-
-
-# In[ ]:
-
+db.commit()
 
 #close cursor object and database
 mycursor.close()
-face_db.close()
+db.close()
 
